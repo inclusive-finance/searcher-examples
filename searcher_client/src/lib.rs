@@ -99,7 +99,7 @@ pub async fn send_bundle_with_confirmation<T>(
     rpc_client: &RpcClient,
     searcher_client: &mut SearcherServiceClient<T>,
     bundle_results_subscription: &mut Streaming<BundleResult>,
-) -> Result<(), Box<dyn std::error::Error>>
+) -> Result<Vec<Signature>, Box<dyn std::error::Error>>
 where
     T: tonic::client::GrpcService<tonic::body::BoxBody> + Send + 'static + Clone,
     T::Error: Into<StdError>,
@@ -195,7 +195,7 @@ where
     for sig in bundle_signatures.iter() {
         info!("https://solscan.io/tx/{}?cluster={}", sig, cluster);
     }
-    Ok(())
+    Ok(bundle_signatures)
 }
 
 pub async fn send_bundle_no_wait<T>(
